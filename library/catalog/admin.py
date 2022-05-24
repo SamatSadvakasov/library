@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import *
+from .models import BookInstance, Book, Author, Genre
 
 
 class BooksInstanceInline(admin.TabularInline):
@@ -9,15 +9,19 @@ class BooksInstanceInline(admin.TabularInline):
 # admin.site.register(Book)
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
-    list_display = ('title', 'author', 'display_genre')
+    list_display = ('title', 'author', 'isbn')
     inlines = [BooksInstanceInline]
+    
+    list_filter = ('title',)
 
 
 # admin.site.register(Author)
 class AuthorAdmin(admin.ModelAdmin):
-    list_display = ('last_name', 'first_name', 'date_of_birth', 'date_of_death')
+    list_display = ('last_name', 'first_name', 'date_of_birth')
 
-    fields = [('first_name', 'last_name'), ('date_of_birth', 'date_of_death')]
+    fields = [('first_name', 'last_name'), ('date_of_birth')]
+
+    list_filter = ('last_name',)
 
 
 admin.site.register(Author, AuthorAdmin)
