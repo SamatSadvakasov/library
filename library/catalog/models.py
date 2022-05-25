@@ -29,6 +29,12 @@ class Author(models.Model):
     def __str__(self):
         """String for representing the Model object."""
         return f'{self.last_name}, {self.first_name}'
+    
+    def get_date_of_birth(self):
+        """Returns a formatted date of birth of a particular author."""
+        return self.date_of_birth.strftime('%d.%m.%Y')
+
+    get_date_of_birth.short_description = 'dob'
 
 
 class Book(models.Model):
