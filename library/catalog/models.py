@@ -5,7 +5,6 @@ from datetime import date
 from django.contrib.auth.models import User
 
 
-
 class Genre(models.Model):
     """Model representing a book genre."""
     name = models.CharField(max_length=200, help_text='Enter a book genre (e.g. Science Fiction)')
@@ -90,8 +89,9 @@ class BookInstance(models.Model):
     )
 
     class Meta:
+        permissions = (("can_mark_returned", "Set book as returned"),)
         ordering = ['due_back']
-    
+
     def is_overdue(self):
         if self.due_back and date.today() > self.due_back:
             return True

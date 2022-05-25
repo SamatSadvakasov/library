@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from django.views import generic
 from .models import Book, Author, BookInstance, Genre
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 
+@permission_required('catalog.can_mark_returned')
 @login_required
 def index(request):
     # EXAMPLE
@@ -29,27 +30,32 @@ def index(request):
     return render(request, 'catalog/index.html', context=context)
 
 
-class BookListView(LoginRequiredMixin, generic.ListView):
+class BookListView(PermissionRequiredMixin, LoginRequiredMixin, generic.ListView):
+    permission_required = 'catalog.can_mark_returned'
     model = Book
     paginate_by = 10
 
 
-class AuthorListView(LoginRequiredMixin,generic.ListView):
+class AuthorListView(PermissionRequiredMixin,LoginRequiredMixin, generic.ListView):
+    permission_required = 'catalog.can_mark_returned'
     model = Author
     paginate_by = 10
 
 
-class BookDetailView(LoginRequiredMixin, generic.DetailView):
+class BookDetailView(PermissionRequiredMixin, LoginRequiredMixin, generic.DetailView):
+    permission_required = 'catalog.can_mark_returned'
     model = Book
 
 
-class AuthorDetailView(LoginRequiredMixin, generic.DetailView):
+class AuthorDetailView(PermissionRequiredMixin, LoginRequiredMixin, generic.DetailView):
+    permission_required = 'catalog.can_mark_returned'
     model = Author
 
-class LoanedBooksByUserListView(LoginRequiredMixin,generic.ListView):
+
+class LoanedBooksByUserListView(PermissionRequiredMixin, LoginRequiredMixin, generic.ListView):
     """Generic class-based view listing books on loan to current user."""
     model = BookInstance
-    template_name ='catalog/bookinstance_list_borrowed_user.html'
+    template_name = 'catalog/bookinstance_list_borrowed_user.html'
     paginate_by = 10
 
     def get_queryset(self):
