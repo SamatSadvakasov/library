@@ -5,6 +5,12 @@ from datetime import date
 from django.contrib.auth.models import User
 
 
+class Language(models.Model):
+    name = models.CharField(max_length=50, help_text='Enter a book language')
+
+    def __str__(self):
+        return  self.name
+
 class Genre(models.Model):
     """Model representing a book genre."""
     name = models.CharField(max_length=200, help_text='Enter a book genre (e.g. Science Fiction)')
@@ -50,6 +56,8 @@ class Book(models.Model):
     # Genre class has already been defined so we can specify the object above.
     genre = models.ManyToManyField(Genre, help_text='Select a genre for this book')
 
+    language = models.ManyToManyField(Language, help_text='Select a book language')
+
     def __str__(self):
         """String for representing the Model object."""
         return self.title
@@ -59,6 +67,11 @@ class Book(models.Model):
         return ', '.join(genre.name for genre in self.genre.all()[:3])
 
     display_genre.short_description = 'Genre'
+
+    def display_language(self):
+        return ', '.join(language.name for language in self.language.all()[:3])
+
+    display_language.short_description = 'Languageru'
 
     def get_absolute_url(self):
         """Returns the URL to access a detail record for this book."""
@@ -89,7 +102,8 @@ class BookInstance(models.Model):
     )
 
     class Meta:
-        permissions = (("can_mark_returned", "Set book as returned"),)
+        permissions = (("can_mark_returned", "Set book as returned"),
+                       ("staff_member_required", "Set user as library employee"))
         ordering = ['due_back']
 
     def is_overdue(self):
