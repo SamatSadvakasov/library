@@ -5,8 +5,8 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 
-@permission_required('catalog.can_mark_returned')
-# @permission_required('catalog.staff_member_required')
+# @permission_required('catalog.can_mark_returned')
+# # @permission_required('catalog.staff_member_required')
 @login_required
 def index(request):
     # EXAMPLE
@@ -61,7 +61,7 @@ class LoanedBooksByUserListView(PermissionRequiredMixin, LoginRequiredMixin, gen
     paginate_by = 10
 
     def get_queryset(self):
-        return BookInstance.objects.filter(borrower=self.request.user).filter(status__exact='o').order_by('due_back')
+        return BookInstance.objects.filter(borrower=self.request.user).filter(status__exact='r').order_by('due_back')
 
 
 class LoanedBorrowerBookListView(PermissionRequiredMixin, LoginRequiredMixin, generic.ListView):
@@ -70,4 +70,5 @@ class LoanedBorrowerBookListView(PermissionRequiredMixin, LoginRequiredMixin, ge
     template_name = 'catalog/bookinstance_list_borrowed_user.html'
     paginate_by = 10
 
-
+    def get_queryset(self):
+        return BookInstance.objects.filter(status__exact='r').order_by('due_back')

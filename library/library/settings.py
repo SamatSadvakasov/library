@@ -84,8 +84,8 @@ DATABASES = {
             'options': '-c search_path=itstep'
         },
         'NAME': 'itstep',
-        'USER': 'itstep-admin',
-        'PASSWORD': 'admin',
+        'USER': 'itstep_admin',
+        'PASSWORD': 'QAZqaz123',
         'HOST': 'localhost',
         'PORT': '5432',
     }
