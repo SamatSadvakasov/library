@@ -6,7 +6,7 @@
   <p><strong>Author:</strong> <a href="{% url 'author-detail' book.author.pk %}">{{ book.author }}</a></p> <!-- author detail link not yet defined -->
   <p><strong>Summary:</strong> {{ book.summary }}</p>
   <p><strong>ISBN:</strong> {{ book.isbn }}</p>
-  <p><strong>Language:</strong> {{ book.language }}</p>
+  <p><strong>Language:</strong> {{ book.language.all|join:", " }}</p>
   <p><strong>Genre:</strong> {{ book.genre.all|join:", " }}</p>
 
   <div style="margin-left:20px;margin-top:20px">
