@@ -24,6 +24,8 @@
             <li><a href="{% url 'my-borrowed' %}">My Borrowed</a></li>
             {% elif perms.catalog.staff_member_required %}
             <li><a href="{% url 'all-borrowed' %}">All Borrowed</a></li>
+            <li><a href="{% url 'author-create' %}">Add Author</a></li>
+            <li><a href="{% url 'book-create' %}">Add Book</a></li>
             {% endif %}
             <li><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>
           {% else %}
