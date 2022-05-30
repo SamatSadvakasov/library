@@ -69,25 +69,25 @@ def index(request):
     return render(request, 'catalog/index.html', context=context)
 
 
-class BookListView(PermissionRequiredMixin, LoginRequiredMixin, generic.ListView):
-    permission_required = 'catalog.can_mark_returned'
+class BookListView(LoginRequiredMixin, generic.ListView):
+#    permission_required = 'catalog.can_mark_returned'
     model = Book
     paginate_by = 10
 
 
-class AuthorListView(PermissionRequiredMixin, LoginRequiredMixin, generic.ListView):
-    permission_required = 'catalog.can_mark_returned'
+class AuthorListView(LoginRequiredMixin, generic.ListView):
+#    permission_required = 'catalog.can_mark_returned'
     model = Author
     paginate_by = 10
 
 
-class BookDetailView(PermissionRequiredMixin, LoginRequiredMixin, generic.DetailView):
-    permission_required = 'catalog.can_mark_returned'
+class BookDetailView(LoginRequiredMixin, generic.DetailView):
+ #   permission_required = 'catalog.can_mark_returned'
     model = Book
 
 
-class AuthorDetailView(PermissionRequiredMixin, LoginRequiredMixin, generic.DetailView):
-    permission_required = 'catalog.can_mark_returned'
+class AuthorDetailView(LoginRequiredMixin, generic.DetailView):
+#    permission_required = 'catalog.can_mark_returned'
     model = Author
 
 
@@ -126,3 +126,17 @@ class AuthorUpdate(UpdateView):
 class AuthorDelete(DeleteView):
     model = Author
     success_url = reverse_lazy('authors')
+
+
+class BookCreate(CreateView):
+    model = Book
+    fields = '__all__'
+
+class BookUpdate(UpdateView):
+    model = Book
+    fields = '__all__'  # Not recommended (potential security issue if more fields added)
+
+
+class BookDelete(DeleteView):
+    model = Book
+    success_url = reverse_lazy('books')
