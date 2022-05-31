@@ -1,5 +1,5 @@
 from django.test import TestCase
-from catalog.models import Author
+from catalog.models import Author, Genre
 
 
 class AuthorModelTest(TestCase):
@@ -16,6 +16,17 @@ class AuthorModelTest(TestCase):
         author = Author.objects.get(id=1)
         max_length = author._meta.get_field('first_name').max_length
         self.assertEqual(max_length, 100)
+
+class GenreModelTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        Genre.objects.create(name='Fantastiiiiic')
+
+    def test_name_label(self):
+        genre = Genre.objects.get(id=1)
+        field_label = genre._meta.get_field('name').verbose_name
+        self.assertEqual(field_label, 'Name:')
+
 
 
 

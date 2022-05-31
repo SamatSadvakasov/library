@@ -31,4 +31,31 @@ class AuthorListViewTest(TestCase):
         self.assertTrue(response.context['is_paginated'] == True)
         self.assertEqual(len(response.context['author_list']), 10)
 
+class BookListView(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        number_of_books = 13
+        for book in range(number_of_books):
+            Author.objects.create(
+                title=f'Showw {book}',
+                author=f'Surname {book}'
+            )
+
+    def setUp(self) -> None:
+        test_user1 = User.objects.create_user(username='testuser1', password='QAZqaz123')
+        test_user1.save()
+
+    def test_view_url_accessible_by_name(self):
+        self.client.login(username='testuser1', password='QAZqaz123')
+        response = self.client.get('/catalog/authors/')  # /catalog/authors/
+        self.assertEqual(response.status_code, 200)
+
+    def test_pagination_is_ten(self):
+        self.client.login(username='testuser1', password='QAZqaz123')
+        response = self.client.get(reverse('books'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('is_paginated' in response.context)
+        self.assertTrue(response.context['is_paginated'] == True)
+        self.assertEqual(len(response.context['book_list']), 10)
+
 # 3 CLASS each 3 methods
