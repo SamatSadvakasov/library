@@ -14,11 +14,17 @@ class BookAdmin(admin.ModelAdmin):
     search_fields = ['title']
 
 
+@admin.action(description='Mark selected stories as published')
+def make_published(modeladmin, request, queryset):
+    queryset.update(status='p')
+
+
 class AuthorAdmin(admin.ModelAdmin):
     list_display = ('last_name', 'first_name', 'date_of_birth', 'date_of_death')
     fields = [('first_name', 'last_name'), ('date_of_birth', 'date_of_death')]
     list_display_links = ['first_name', 'last_name']
     search_fields = ['last_name', 'first_name']
+    actions = [make_published]
 
 
 admin.site.register(Author, AuthorAdmin)
