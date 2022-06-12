@@ -89,7 +89,8 @@ class BookInstance(models.Model):
     )
 
     class Meta:
-        permissions = (("can_mark_returned", "Set book as returned"), )
+        permissions = (("can_mark_returned", "Set book as returned"),
+                       ("staff_member_required", "Set user as library employee"))
         ordering = ['due_back']
 
     def is_overdue(self):
