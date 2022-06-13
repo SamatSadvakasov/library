@@ -7,6 +7,10 @@
     {% for author in author_list %}
       <li>
         <a href="{% url 'author-detail' author.pk %}">{{ author.first_name }} {{author.last_name }}</a>
+        {% if perms.catalog.staff_member_required %}
+        <a class="btn btn-warning" href="{% url 'author-update' author.pk %}" role="button">UPDATE</a>/
+        <a class="btn btn-danger" href="{% url 'author-delete' author.pk %}" role="button">DELETE</a>
+        {% endif %}
       </li>
     {% endfor %}
   </ul>

@@ -60,10 +60,9 @@ def index(request):
     return render(request, 'catalog/index.html', context=context)
 
 
-class BookListView(PermissionRequiredMixin, LoginRequiredMixin, generic.ListView):
+class BookListView(LoginRequiredMixin, generic.ListView):
      model = Book
-     paginate_by = 1
-     permission_required = 'catalog.can_mark_returned'
+     paginate_by = 5
 
 
       # context_object_name = 'book_list'
@@ -71,28 +70,23 @@ class BookListView(PermissionRequiredMixin, LoginRequiredMixin, generic.ListView
      # template_name = 'books/my_book.html'
 
 
-class BookDetailView(PermissionRequiredMixin, LoginRequiredMixin, generic.DetailView):
+class BookDetailView(LoginRequiredMixin, generic.DetailView):
     model = Book
-    permission_required = 'catalog.can_mark_returned'
 
-
-class AuthorListView(PermissionRequiredMixin, LoginRequiredMixin, generic.ListView):
+class AuthorListView(LoginRequiredMixin, generic.ListView):
     model = Author
-    paginate_by = 1
-    permission_required = 'catalog.can_mark_returned'
+    paginate_by = 5
 
 
-class AuthorDetailView(PermissionRequiredMixin, LoginRequiredMixin, generic.DetailView):
+class AuthorDetailView(LoginRequiredMixin, generic.DetailView):
     model = Author
-    permission_required = 'catalog.can_mark_returned'
 
 
-class LoanedBooksByUserListView(PermissionRequiredMixin, LoginRequiredMixin, generic.ListView):
+class LoanedBooksByUserListView( LoginRequiredMixin, generic.ListView):
     """Generic class-based view listing books on loan to current user."""
     model = BookInstance
     template_name ='catalog/bookinstance_list_borrowed_user.html'
     paginate_by = 10
-    permission_required = 'catalog.can_mark_returned'
 
 
     def get_queryset(self):
@@ -109,19 +103,47 @@ class LoanedBookListView(PermissionRequiredMixin, LoginRequiredMixin, generic.Li
         return BookInstance.objects.filter(status__exact='r').order_by('due_back')
 
 
-class AuthorCreate(CreateView):
+class AuthorCreate(CreateView, PermissionRequiredMixin, LoginRequiredMixin):
+    permission_required = 'catalog.staff_member_required'
     model = Author
     fields = ['first_name', 'last_name', 'date_of_birth', 'date_of_death']  # '__all__'
     initial = {'date_of_death': '11/06/2020'}
 
 
-class AuthorUpdate(UpdateView):
+class AuthorUpdate(UpdateView, PermissionRequiredMixin, LoginRequiredMixin):
+
+    permission_required = 'catalog.staff_member_required'
     model = Author
     fields = '__all__'  # Not recommended (potential security issue if more fields added)
 
 
-class AuthorDelete(DeleteView):
+class AuthorDelete(DeleteView, PermissionRequiredMixin, LoginRequiredMixin):
+    permission_required = 'catalog.staff_member_required'
     model = Author
     success_url = reverse_lazy('authors')
+
+
+class BookCreate(PermissionRequiredMixin, LoginRequiredMixin, CreateView ):
+    permission_required = 'catalog.staff_member_required'
+    model = Book
+    fields = '__all__'
+
+
+class BookUpdate(UpdateView, PermissionRequiredMixin, LoginRequiredMixin):
+    permission_required = 'catalog.staff_member_required'
+    model = Book
+    fields = '__all__'  # Not recommended (potential security issue if more fields added)
+
+
+class BookDelete(DeleteView, PermissionRequiredMixin, LoginRequiredMixin):
+    permission_required = 'catalog.staff_member_required'
+    model = Book
+    success_url = reverse_lazy('books')
+
+
+
+
+
+
 
 
