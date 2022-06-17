@@ -17,6 +17,12 @@ class AuthorModelTest(TestCase):
         max_length = author._meta.get_field('first_name').max_length
         self.assertEqual(max_length, 100)
 
+    def test_get_absolute_url(self):
+        author = Author.objects.get(id=1)
+        # This will also fail if the urlconf is not defined.
+        self.assertEqual(author.get_absolute_url(), '/catalog/author/1')
+
+
 
 
 # class YourTestClass(TestCase):
